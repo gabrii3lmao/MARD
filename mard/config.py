@@ -14,9 +14,9 @@ class Settings(BaseSettings):
     version: str = '0.1.0'
     debug: bool = False
 
-    database_url: str = 'postgresql+asyncpg://mard:mard@localhost:5433/mard'
+    database_url: str = 'postgresql+asyncpg://mard:mard@localhost:5432/mard'
     test_database_url: str = (
-        'postgresql+asyncpg://mard:mard@localhost:5433/mard_test'
+        'postgresql+asyncpg://mard:mard@localhost:5432/mard_test'
     )
 
 

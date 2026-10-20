@@ -14,32 +14,27 @@ API em FastAPI para gerenciar uma livraria online com SQLAlchemy 2 e PostgreSql.
 
 poetry install
 
-# 2. Crie o arquivo de ambiente
 cp .env.example .env
 
-# 3. Suba o PostgreSQL de desenvolvimento
 poetry run poe db-up
 
-# 4. Aplique as migrações
 poetry run poe migrate
 
-# 5. Rode a API
 poetry run poe serve
 ```
 
 ## Banco de dados
 
-O `docker-compose.yml` sobe um PostgreSQL 17 na porta **5433** (para não
-conflitar com outros Postgres locais) com dois bancos:
+O `docker-compose.yml` sobe um PostgreSQL 17 na porta 5432
 
 - `mard` — desenvolvimento
-- `mard_test` — testes (criado por `docker/postgres/init.sql`)
+- `mard_test` — container de testes (criado por `docker/postgres/init.sql`)
 
 As URLs ficam no `.env`:
 
 ```dotenv
-DATABASE_URL=postgresql+asyncpg://mard:mard@localhost:5433/mard
-TEST_DATABASE_URL=postgresql+asyncpg://mard:mard@localhost:5433/mard_test
+DATABASE_URL=postgresql+asyncpg://mard:mard@localhost:5432/mard
+TEST_DATABASE_URL=postgresql+asyncpg://mard:mard@localhost:5432/mard_test
 ```
 
 As credenciais são apenas para desenvolvimento local.
