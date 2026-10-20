@@ -28,7 +28,8 @@ poetry run poe serve
 O `docker-compose.yml` sobe um PostgreSQL 17 na porta 5432
 
 - `mard` — desenvolvimento
-- `mard_test` — container de testes (criado por `docker/postgres/init.sql`)
+- `mard_test` — criado por `docker/postgres/init.sql` (não é usado pelos
+  testes, que sobem um banco efêmero via Testcontainers)
 
 As URLs ficam no `.env`:
 
@@ -46,10 +47,23 @@ poetry run poe migrate
 
 ### Testes
 
-Os testes usam o banco `mard_test` e criam/derrubam o schema da `Base`
-automaticamente a cada sessão de testes. Suba o banco antes de rodar:
+Os testes sobem um PostgreSQL efêmero com
+[Testcontainers](https://testcontainers-python.readthedocs.io/) (imagem
+`postgres:17-alpine`) e criam/derrubam o schema a cada teste. Não é preciso
+subir o `docker compose` antes.
+
+Pré-requisito: Docker ou Podman com o socket ativo. No Podman rootless:
 
 ```bash
-poetry run poe db-up
+systemctl --user enable --now podman.socket
+export DOCKER_HOST=unix:///run/user/$UID/podman/podman.sock
+```
+
+O Ryuk (limpador automático do Testcontainers) é desabilitado em
+`tests/conftest.py`, pois não funciona com Podman rootless.
+
+```bash
 poetry run poe test
 ```
+
+Na primeira execução a imagem `postgres:17-alpine` é baixada.
