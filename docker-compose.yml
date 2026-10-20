@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: mard-db
+    environment:
+      POSTGRES_USER: mard
+      POSTGRES_PASSWORD: mard
+      POSTGRES_DB: mard
+    ports:
+      - '5433:5432'
+    volumes:
+      - mard_pgdata:/var/lib/postgresql/data
+      # :Z reajusta o rótulo SELinux (necessário no Podman/Fedora)
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro,Z
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U mard -d mard']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  mard_pgdata:
