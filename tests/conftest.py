@@ -1,6 +1,6 @@
 import asyncio
 import os
-from collections.abc import AsyncIterator, Iterator
+from collections.abc import AsyncIterator
 
 import pytest
 import pytest_asyncio
@@ -16,7 +16,7 @@ from testcontainers.community.postgres import PostgresContainer
 
 from mard.app import app
 from mard.database import get_session
-from mard.models import User, table_registry
+from mard.models import Book, Romancist, User, table_registry
 
 os.environ.setdefault('TESTCONTAINERS_RYUK_DISABLED', 'true')
 
@@ -78,5 +78,32 @@ async def user(session: AsyncSession) -> User:
     await session.commit()
     await session.refresh(user_db)
 
-    user_db.clean_password = user_db.password
+    user_db.clean_password = '123456'
     return user_db
+
+
+@pytest_asyncio.fixture
+async def romancist(session: AsyncSession) -> Romancist:
+    romancist_db = Romancist(name='Machado de Assis')
+
+    session.add(romancist_db)
+    await session.commit()
+    await session.refresh(romancist_db)
+
+    return romancist_db
+
+
+@pytest_asyncio.fixture
+async def book(session: AsyncSession, romancist: Romancist) -> Book:
+    book_db = Book(
+        title='Dom Casmurro',
+        year=1899,
+        romancist_id=romancist.id,
+    )
+
+    session.add(book_db)
+    romancist.books.append(book_db)
+    await session.commit()
+    await session.refresh(book_db)
+
+    return book_db

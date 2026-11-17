@@ -7,8 +7,6 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from mard.config import settings
-from mard.database import Base
-
 from mard.models import table_registry
 
 # this is the Alembic Config object, which provides

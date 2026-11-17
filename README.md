@@ -23,6 +23,31 @@ poetry run poe migrate
 poetry run poe serve
 ```
 
+## API
+
+As senhas dos usuários são armazenadas com hash Argon2 (via `pwdlib`),
+nunca em texto puro.
+
+| Método | Rota | Descrição |
+| --- | --- | --- |
+| `POST` | `/users/` | Cria um usuário |
+| `GET` | `/users/` | Lista usuários (paginação com `offset`/`limit`) |
+| `GET` | `/users/{id}` | Busca um usuário |
+| `PUT` | `/users/{id}` | Atualiza um usuário |
+| `DELETE` | `/users/{id}` | Remove um usuário |
+| `POST` | `/romancists/` | Cria um autor |
+| `GET` | `/romancists/` | Lista autores |
+| `GET` | `/romancists/{id}` | Busca um autor |
+| `PUT` | `/romancists/{id}` | Atualiza um autor |
+| `DELETE` | `/romancists/{id}` | Remove um autor e seus livros |
+| `POST` | `/books/` | Cria um livro |
+| `GET` | `/books/` | Lista livros |
+| `GET` | `/books/{id}` | Busca um livro |
+| `PUT` | `/books/{id}` | Atualiza um livro |
+| `DELETE` | `/books/{id}` | Remove um livro |
+
+A documentação interativa fica em `/docs` com o servidor rodando.
+
 ## Banco de dados
 
 O `docker-compose.yml` sobe um PostgreSQL 17 na porta 5432
